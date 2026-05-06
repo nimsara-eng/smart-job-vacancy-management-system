@@ -1,11 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
 import type { Job, User, Application } from '../types'
-
-// ─── Helpers: read / write JSON files via fetch ─────────────────────────────
-// In dev the data/ folder is served by Vite from the project root.
-// Writes are simulated (state only); for real persistence wire up a small
-// Express bridge or Tauri/Electron backend that calls your C++ .exe.
 
 async function loadJSON<T>(path: string): Promise<T> {
   const res = await fetch(path)
@@ -13,148 +7,112 @@ async function loadJSON<T>(path: string): Promise<T> {
   return res.json()
 }
 
-export const useDataStore = defineStore('data', () => {
-  const jobs = ref<Job[]>([])
-  const users = ref<User[]>([])
-  const applications = ref<Application[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
-
-  // ── Load ──────────────────────────────────────────────────────────────────
-  async function loadAll() {
-    loading.value = true
-    error.value = null
-    try {
-      ;[jobs.value, users.value, applications.value] = await Promise.all([
-        loadJSON<Job[]>('/data/jobs.json'),
-        loadJSON<User[]>('/data/users.json'),
-        loadJSON<Application[]>('/data/applications.json'),
-      ])
-    } catch (e: any) {
-      error.value = e.message
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // ── Jobs ──────────────────────────────────────────────────────────────────
-  function addJob(job: Omit<Job, 'id'>) {
-    const id = jobs.value.length ? Math.max(...jobs.value.map(j => j.id)) + 1 : 1
-    jobs.value.push({ ...job, id })
-  }
-
-  function updateJob(updated: Job) {
-    const idx = jobs.value.findIndex(j => j.id === updated.id)
-    if (idx !== -1) jobs.value[idx] = updated
-  }
-
-  function removeJob(id: number) {
-    jobs.value = jobs.value.filter(j => j.id !== id)
-  }
-
-  function toggleJobStatus(id: number) {
-    const job = jobs.value.find(j => j.id === id)
-    if (job) job.isOpen = !job.isOpen
-  }
-
-  function getJobById(id: number) {
-    return jobs.value.find(j => j.id === id) ?? null
-  }
-
-  function searchJobs(query: string, category: string, remote: boolean | null) {
-    const q = query.toLowerCase()
-    return jobs.value.filter(j => {
-      const matchQuery =
-        !q ||
-        j.title.toLowerCase().includes(q) ||
-        j.company.toLowerCase().includes(q) ||
-        j.location.toLowerCase().includes(q) ||
-        j.requiredSkills.some(s => s.toLowerCase().includes(q))
-      const matchCat = !category || j.category === category
-      const matchRemote = remote === null || j.isRemote === remote
-      return matchQuery && matchCat && matchRemote
-    })
-  }
-
-  function getMatchingJobsForUser(userSkills: string[]) {
-    return jobs.value
-      .filter(j => j.isOpen)
-      .map(j => {
-        const matched = j.requiredSkills.filter(s =>
-          userSkills.map(x => x.toLowerCase()).includes(s.toLowerCase()),
-        )
-        return { job: j, matchScore: matched.length / Math.max(j.requiredSkills.length, 1) }
+// Fixed: Converted to Options API to resolve all "Property 'filter' does not exist on type '{ value: ... }'" errors globally.
+export const useDataStore = defineStore('data', {
+  state: () => ({
+    jobs: [] as Job[],
+    users: [] as User[],
+    applications: [] as Application[],
+    loading: false,
+    error: null as string | null
+  }),
+  actions: {
+    async loadAll() {
+      this.loading = true
+      this.error = null
+      try {
+        const [j, u, a] = await Promise.all([
+          loadJSON<Job[]>('/data/jobs.json'),
+          loadJSON<User[]>('/data/users.json'),
+          loadJSON<Application[]>('/data/applications.json'),
+        ])
+        this.jobs = j
+        this.users = u
+        this.applications = a
+      } catch (e: any) {
+        this.error = e.message
+      } finally {
+        this.loading = false
+      }
+    },
+    addJob(job: Omit<Job, 'id'>) {
+      const id = this.jobs.length ? Math.max(...this.jobs.map(j => j.id)) + 1 : 1
+      this.jobs.push({ ...job, id })
+    },
+    updateJob(updated: Job) {
+      const idx = this.jobs.findIndex(j => j.id === updated.id)
+      if (idx !== -1) this.jobs[idx] = updated
+    },
+    removeJob(id: number) {
+      this.jobs = this.jobs.filter(j => j.id !== id)
+    },
+    toggleJobStatus(id: number) {
+      const job = this.jobs.find(j => j.id === id)
+      if (job) job.isOpen = !job.isOpen
+    },
+    getJobById(id: number) {
+      return this.jobs.find(j => j.id === id) ?? null
+    },
+    searchJobs(query: string, category: string, remote: boolean | null) {
+      const q = query.toLowerCase()
+      return this.jobs.filter(j => {
+        const matchQuery =
+          !q ||
+          j.title.toLowerCase().includes(q) ||
+          j.company.toLowerCase().includes(q) ||
+          j.location.toLowerCase().includes(q) ||
+          j.requiredSkills.some(s => s.toLowerCase().includes(q))
+        const matchCat = !category || j.category === category
+        const matchRemote = remote === null || j.isRemote === remote
+        return matchQuery && matchCat && matchRemote
       })
-      .filter(x => x.matchScore > 0)
-      .sort((a, b) => b.matchScore - a.matchScore)
-  }
-
-  // ── Users ─────────────────────────────────────────────────────────────────
-  function registerUser(user: Omit<User, 'id'>) {
-    if (users.value.some(u => u.username === user.username)) {
-      throw new Error('Username already exists')
+    },
+    getMatchingJobsForUser(userSkills: string[]) {
+      return this.jobs
+        .filter(j => j.isOpen)
+        .map(j => {
+          const matched = j.requiredSkills.filter(s =>
+            userSkills.map(x => x.toLowerCase()).includes(s.toLowerCase()),
+          )
+          return { job: j, matchScore: matched.length / Math.max(j.requiredSkills.length, 1) }
+        })
+        .filter(x => x.matchScore > 0)
+        .sort((a, b) => b.matchScore - a.matchScore)
+    },
+    registerUser(user: Omit<User, 'id'>) {
+      if (this.users.some(u => u.username === user.username)) {
+        throw new Error('Username already exists')
+      }
+      const id = this.users.length ? Math.max(...this.users.map(u => u.id)) + 1 : 1
+      const newUser: User = { ...user, id }
+      this.users.push(newUser)
+      return newUser
+    },
+    loginUser(username: string, password: string): User | null {
+      return this.users.find(u => u.username === username && u.password === password) ?? null
+    },
+    updateUser(updated: User) {
+      const idx = this.users.findIndex(u => u.id === updated.id)
+      if (idx !== -1) this.users[idx] = updated
+    },
+    submitApplication(app: Omit<Application, 'applicationId'>) {
+      const applicationId = this.applications.length
+        ? Math.max(...this.applications.map(a => a.applicationId)) + 1
+        : 1
+      this.applications.push({ ...app, applicationId })
+    },
+    updateApplicationStatus(applicationId: number, status: Application['status']) {
+      const app = this.applications.find(a => a.applicationId === applicationId)
+      if (app) app.status = status
+    },
+    getApplicationsByUser(userId: number) {
+      return this.applications.filter(a => a.userId === userId)
+    },
+    getApplicationsByJob(jobId: number) {
+      return this.applications.filter(a => a.jobId === jobId)
+    },
+    hasApplied(userId: number, jobId: number) {
+      return this.applications.some(a => a.userId === userId && a.jobId === jobId)
     }
-    const id = users.value.length ? Math.max(...users.value.map(u => u.id)) + 1 : 1
-    const newUser: User = { ...user, id }
-    users.value.push(newUser)
-    return newUser
-  }
-
-  function loginUser(username: string, password: string): User | null {
-    return users.value.find(u => u.username === username && u.password === password) ?? null
-  }
-
-  function updateUser(updated: User) {
-    const idx = users.value.findIndex(u => u.id === updated.id)
-    if (idx !== -1) users.value[idx] = updated
-  }
-
-  // ── Applications ──────────────────────────────────────────────────────────
-  function submitApplication(app: Omit<Application, 'applicationId'>) {
-    const applicationId = applications.value.length
-      ? Math.max(...applications.value.map(a => a.applicationId)) + 1
-      : 1
-    applications.value.push({ ...app, applicationId })
-  }
-
-  function updateApplicationStatus(applicationId: number, status: Application['status']) {
-    const app = applications.value.find(a => a.applicationId === applicationId)
-    if (app) app.status = status
-  }
-
-  function getApplicationsByUser(userId: number) {
-    return applications.value.filter(a => a.userId === userId)
-  }
-
-  function getApplicationsByJob(jobId: number) {
-    return applications.value.filter(a => a.jobId === jobId)
-  }
-
-  function hasApplied(userId: number, jobId: number) {
-    return applications.value.some(a => a.userId === userId && a.jobId === jobId)
-  }
-
-  return {
-    jobs,
-    users,
-    applications,
-    loading,
-    error,
-    loadAll,
-    addJob,
-    updateJob,
-    removeJob,
-    toggleJobStatus,
-    getJobById,
-    searchJobs,
-    getMatchingJobsForUser,
-    registerUser,
-    loginUser,
-    updateUser,
-    submitApplication,
-    updateApplicationStatus,
-    getApplicationsByUser,
-    getApplicationsByJob,
-    hasApplied,
   }
 })

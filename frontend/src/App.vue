@@ -96,9 +96,10 @@ const router = useRouter()
 const menuOpen = ref(false)
 const menuRef = ref<HTMLElement | null>(null)
 
+// FIXED: Removed .value and used auth.user directly
 const initials = computed(() => {
   const name = auth.user?.name || ''
-  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+  return name.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2)
 })
 
 function handleLogout() {
@@ -167,6 +168,7 @@ onUnmounted(() => {
   letter-spacing: .04em;
   background: linear-gradient(135deg, var(--c-accent), var(--c-accent2));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

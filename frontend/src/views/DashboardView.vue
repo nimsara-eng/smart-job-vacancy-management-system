@@ -32,7 +32,7 @@
               v-for="m in matchedJobs.slice(0, 4)"
               :key="m.job.id"
               :job="m.job"
-              :userSkills="auth.user?.skills"
+              :userSkills="auth.user?.skills ?? []"
               :matchScore="m.matchScore"
             />
           </div>
@@ -128,6 +128,7 @@ import JobCard from '../components/JobCard.vue'
 const auth = useAuthStore()
 const data = useDataStore()
 
+
 const greeting = computed(() => {
   const h = new Date().getHours()
   if (h < 12) return 'morning'
@@ -178,6 +179,7 @@ function statusBadge(status: string) {
 .name-highlight {
   background: linear-gradient(135deg, var(--c-accent), var(--c-accent2));
   -webkit-background-clip: text;
+  background-clip: text; /* Fixed compatibility warning */
   -webkit-text-fill-color: transparent;
 }
 

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { storeToRefs } from 'pinia'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -28,9 +29,12 @@ const router = createRouter({
 
 router.beforeEach(guard => {
   const auth = useAuthStore()
-  if (guard.meta.requiresAuth && !auth.isLoggedIn) return { name: 'Login', query: { redirect: guard.fullPath } }
-  if (guard.meta.guest && auth.isLoggedIn) return { name: 'Dashboard' }
-  if (guard.meta.role && auth.user?.role !== guard.meta.role) return { name: 'Jobs' }
+  // FIXED: Extract as refs so TS knows to use .value inside standard TS logic
+  const { user, isLoggedIn } = storeToRefs(auth)
+  
+  if (guard.meta.requiresAuth && !isLoggedIn.value) return { name: 'Login', query: { redirect: guard.fullPath } }
+  if (guard.meta.guest && isLoggedIn.value) return { name: 'Dashboard' }
+  if (guard.meta.role && user.value?.role !== guard.meta.role) return { name: 'Jobs' }
 })
 
 export default router

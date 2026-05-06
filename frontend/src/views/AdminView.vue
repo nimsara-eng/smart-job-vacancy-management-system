@@ -19,7 +19,7 @@
       <div class="grid-2" style="margin-top:32px">
         <div class="card" style="padding:24px">
           <h2 style="font-size:1rem;margin-bottom:16px">All Users</h2>
-          <div v-for="u in data.users" :key="u.id" class="admin-row">
+          <div v-for="u in users" :key="u.id" class="admin-row">
             <div class="mini-av">{{ u.name.charAt(0) }}</div>
             <div style="flex:1">
               <div style="font-size:.88rem;font-weight:500">{{ u.name }}</div>
@@ -27,19 +27,19 @@
             </div>
             <span :class="u.role === 'employer' ? 'badge badge-purple' : 'badge badge-blue'">{{ u.role }}</span>
           </div>
-          <div v-if="!data.users.length" class="empty-state" style="padding:32px">No users yet.</div>
+          <div v-if="!users.length" class="empty-state" style="padding:32px">No users yet.</div>
         </div>
 
         <div class="card" style="padding:24px">
           <h2 style="font-size:1rem;margin-bottom:16px">All Jobs</h2>
-          <div v-for="j in data.jobs" :key="j.id" class="admin-row">
+          <div v-for="j in jobs" :key="j.id" class="admin-row">
             <div style="flex:1">
               <div style="font-size:.88rem;font-weight:500">{{ j.title }}</div>
               <div style="font-size:.75rem;color:var(--c-text3)">{{ j.company }}</div>
             </div>
             <span :class="j.isOpen ? 'badge badge-green' : 'badge badge-red'">{{ j.isOpen ? 'Open' : 'Closed' }}</span>
           </div>
-          <div v-if="!data.jobs.length" class="empty-state" style="padding:32px">No jobs yet.</div>
+          <div v-if="!jobs.length" class="empty-state" style="padding:32px">No jobs yet.</div>
         </div>
       </div>
     </div>
@@ -52,10 +52,16 @@ import { useDataStore } from '../stores/data'
 
 const data = useDataStore()
 
+// Access the unwrapped value from store Refs
+const users = data.users
+const jobs = data.jobs
+const applications = data.applications
+
 const stats = computed(() => [
-  { label: 'Total Users', value: data.users.length, bg: 'rgba(79,142,247,.12)', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#4f8ef7" stroke-width="1.8"/><circle cx="9" cy="7" r="4" stroke="#4f8ef7" stroke-width="1.8"/></svg>' },
-  { label: 'Total Jobs', value: data.jobs.length, bg: 'rgba(124,90,247,.12)', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#7c5af7" stroke-width="1.8"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="#7c5af7" stroke-width="1.8"/></svg>' },
-  { label: 'Applications', value: data.applications.length, bg: 'rgba(62,207,142,.12)', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#3ecf8e" stroke-width="1.8"/><path d="M7 8h10M7 12h10M7 16h6" stroke="#3ecf8e" stroke-width="1.8" stroke-linecap="round"/></svg>' },
+  // FIXED: Removed .value because data.users, data.jobs, etc., are already unwrapped arrays
+  { label: 'Total Users', value: users.length, bg: 'rgba(79,142,247,.12)', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#4f8ef7" stroke-width="1.8"/><circle cx="9" cy="7" r="4" stroke="#4f8ef7" stroke-width="1.8"/></svg>' },
+  { label: 'Total Jobs', value: jobs.length, bg: 'rgba(124,90,247,.12)', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#7c5af7" stroke-width="1.8"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="#7c5af7" stroke-width="1.8"/></svg>' },
+  { label: 'Applications', value: applications.length, bg: 'rgba(62,207,142,.12)', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#3ecf8e" stroke-width="1.8"/><path d="M7 8h10M7 12h10M7 16h6" stroke="#3ecf8e" stroke-width="1.8" stroke-linecap="round"/></svg>' },
 ])
 </script>
 

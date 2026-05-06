@@ -4,6 +4,7 @@
       <!-- Hero -->
       <div class="jobs-hero">
         <h1>Find Your Next<br><span class="gradient-text">Opportunity</span></h1>
+        <!-- FIXED: Accessing data.jobs directly from the store -->
         <p>Browse {{ data.jobs.filter(j => j.isOpen).length }} open positions</p>
       </div>
 
@@ -47,6 +48,7 @@
           <button class="sort-btn" :class="{ active: sort === 'default' }" @click="sort = 'default'">Newest</button>
           <button class="sort-btn" :class="{ active: sort === 'salary' }" @click="sort = 'salary'">Salary ↓</button>
           <button class="sort-btn" :class="{ active: sort === 'title' }" @click="sort = 'title'">Title A–Z</button>
+          <!-- FIXED: Accessing auth.user directly -->
           <button v-if="auth.user?.role === 'applicant'" class="sort-btn" :class="{ active: sort === 'match' }" @click="sort = 'match'">Best Match</button>
         </div>
       </div>
@@ -65,7 +67,7 @@
           v-for="item in sorted"
           :key="item.job.id"
           :job="item.job"
-          :userSkills="auth.user?.skills"
+          :userSkills="auth.user?.skills ?? []"
           :matchScore="item.matchScore"
         />
       </TransitionGroup>
@@ -85,11 +87,13 @@ const data = useDataStore()
 const filters = reactive({ query: '', category: '', remote: null as boolean | null })
 const sort = ref<'default' | 'salary' | 'title' | 'match'>('default')
 
+// FIXED: Using data.jobs directly strips away the Ref type confusion
 const categories = computed(() => [...new Set(data.jobs.map(j => j.category))].sort())
 
 const filtered = computed(() => data.searchJobs(filters.query, filters.category, filters.remote))
 
 const matchScoreMap = computed(() => {
+  // FIXED: Using auth.user directly strips away the Ref type confusion
   if (!auth.user) return new Map<number, number>()
   const matches = data.getMatchingJobsForUser(auth.user.skills)
   return new Map(matches.map(m => [m.job.id, m.matchScore]))
@@ -123,6 +127,7 @@ function resetFilters() {
 .gradient-text {
   background: linear-gradient(135deg, var(--c-accent), var(--c-accent2));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

@@ -167,8 +167,9 @@ const matchScore = computed(() => {
   return required.filter(s => skills.includes(s)).length / required.length
 })
 
+// Fixed: Add fallback '[]' to avoid passing 'undefined' to .map() if auth.user is null
 function isSkillMatched(skill: string) {
-  return auth.user?.skills.map(s => s.toLowerCase()).includes(skill.toLowerCase()) ?? false
+  return (auth.user?.skills || []).map(s => s.toLowerCase()).includes(skill.toLowerCase())
 }
 
 const similar = computed(() =>

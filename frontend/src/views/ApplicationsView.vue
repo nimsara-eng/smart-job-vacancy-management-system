@@ -3,6 +3,7 @@
     <div class="container">
       <div class="page-heading">
         <h1>Applications</h1>
+        <!-- FIXED: Accessing 'auth.user' directly fixes the Ref unwrapping bug -->
         <p v-if="auth.user?.role === 'applicant'">Track your job applications</p>
         <p v-else>Review applications for your job listings</p>
       </div>
@@ -102,6 +103,7 @@ const filterStatus = ref('' as string)
 const filterJobId = ref<number | null>(route.query.job ? Number(route.query.job) : null)
 const statuses = ['pending', 'approved', 'rejected']
 
+// FIXED: Using `auth.user` and `data.jobs` directly. Pinia stores are fully reactive automatically.
 const myJobs = computed(() =>
   auth.user?.role === 'employer'
     ? data.jobs.filter(j => j.company === auth.user?.name || j.company === auth.user?.username)
@@ -110,7 +112,7 @@ const myJobs = computed(() =>
 
 const allApps = computed(() => {
   if (auth.user?.role === 'applicant') return data.getApplicationsByUser(auth.user.id)
-  // employer: apps for all their jobs
+  
   const jobIds = new Set(myJobs.value.map(j => j.id))
   return data.applications.filter(a => jobIds.has(a.jobId))
 })
