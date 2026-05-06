@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import { ref, reactive, computed } from 'vue'
+import { useAuthStore } from '../stores/auth'
+import { useDataStore } from '../stores/data'
+import SkillsInput from '../components/SkillsInput.vue'
+import type { User } from '../types' 
+
+const auth = useAuthStore()
+const data = useDataStore()
+
+const form = reactive({
+  name:     auth.user?.name ?? '',
+  username: auth.user?.username ?? '',
+  email:    auth.user?.email ?? '',
+  phone:    auth.user?.phone ?? '',
+  skills:   [...(auth.user?.skills ?? [])],
+  password: '',
+})
+
+const saved = ref(false)
+
+const initials = computed(() =>
+  form.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2),
+)
+
+const myApps = computed(() => auth.user ? data.getApplicationsByUser(auth.user.id) : [])
+const totalApps    = computed(() => myApps.value.length)
+const pendingApps  = computed(() => myApps.value.filter(a => a.status === 'pending').length)
+const approvedApps = computed(() => myApps.value.filter(a => a.status === 'approved').length)
+const rejectedApps = computed(() => myApps.value.filter(a => a.status === 'rejected').length)
+
+function handleSave() {
+  const currentUser = auth.user  // local const lets TypeScript narrow correctly
+  if (!currentUser) return
+  const updated: User = {
+    ...currentUser,
+    name: form.name, username: form.username,
+    email: form.email, phone: form.phone,
+    skills: form.skills,
+    password: form.password || currentUser.password,
+  }
+  data.updateUser(updated)
+  auth.login(updated)
+  form.password = ''
+  saved.value = true
+  setTimeout(() => (saved.value = false), 3000)
+}
+</script>
 <template>
   <div class="page">
     <div class="container" style="max-width:680px">
@@ -85,54 +133,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { useDataStore } from '../stores/data'
-import SkillsInput from '../components/SkillsInput.vue'
 
-const auth = useAuthStore()
-const data = useDataStore()
-
-const form = reactive({
-  name:     auth.user?.name ?? '',
-  username: auth.user?.username ?? '',
-  email:    auth.user?.email ?? '',
-  phone:    auth.user?.phone ?? '',
-  skills:   [...(auth.user?.skills ?? [])],
-  password: '',
-})
-
-const saved = ref(false)
-
-const initials = computed(() =>
-  form.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2),
-)
-
-const myApps = computed(() => auth.user ? data.getApplicationsByUser(auth.user.id) : [])
-const totalApps    = computed(() => myApps.value.length)
-const pendingApps  = computed(() => myApps.value.filter(a => a.status === 'pending').length)
-const approvedApps = computed(() => myApps.value.filter(a => a.status === 'approved').length)
-const rejectedApps = computed(() => myApps.value.filter(a => a.status === 'rejected').length)
-
-function handleSave() {
-  if (!auth.user) return
-  const updated = {
-    ...auth.user,
-    name:     form.name,
-    username: form.username,
-    email:    form.email,
-    phone:    form.phone,
-    skills:   form.skills,
-    password: form.password || auth.user.password,
-  }
-  data.updateUser(updated)
-  auth.login(updated)
-  form.password = ''
-  saved.value = true
-  setTimeout(() => (saved.value = false), 3000)
-}
-</script>
 
 <style scoped>
 .profile-card { padding: 0; overflow: hidden; }

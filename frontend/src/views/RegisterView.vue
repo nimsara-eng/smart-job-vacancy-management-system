@@ -75,6 +75,8 @@ import { useAuthStore } from '../stores/auth'
 import { useDataStore } from '../stores/data'
 import SkillsInput from '../components/SkillsInput.vue'
 
+type Role = 'applicant' | 'employer'
+
 const auth = useAuthStore()
 const data = useDataStore()
 const router = useRouter()
@@ -85,13 +87,14 @@ const form = reactive({
   email: '',
   phone: '',
   password: '',
-  role: 'applicant' as 'applicant' | 'employer',
+  role: 'applicant' as Role,
   skills: [] as string[],
 })
 
-const roles = [
+// ← explicit type so r.value is Role, not string
+const roles: { value: Role; label: string; icon: string }[] = [
   { value: 'applicant', label: 'Job Seeker', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' },
-  { value: 'employer', label: 'Employer',   icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="currentColor" stroke-width="1.8"/></svg>' },
+  { value: 'employer',  label: 'Employer',   icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="currentColor" stroke-width="1.8"/></svg>' },
 ]
 
 const error = ref('')
