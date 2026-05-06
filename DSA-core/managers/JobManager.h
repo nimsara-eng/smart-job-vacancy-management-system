@@ -8,6 +8,7 @@
 #include "../algorithms/Sort.h"
 #include "../algorithms/Search.h"
 #include "../models/Job.h"
+#include "../models/User.h"  // BUG FIX: added explicit User include (needed for buildGraphForNewJob)
 
 class JobManager {
 private:
@@ -21,7 +22,7 @@ private:
 public:
     JobManager(JobList& jl, BST& b, JobHashTable& ht, Graph& g);
 
-    void addJob(Job job);
+    void addJob(Job job, UserList& userList);  // BUG FIX: userList passed so graph edges are built for existing users
     void removeJob(int id);
     void updateJobStatus(int id, bool isOpen);
 
@@ -33,7 +34,7 @@ public:
     std::vector<Job> searchByCategory(std::string category);
     std::vector<Job> searchByLocation(std::string location);
     std::vector<Job> searchBySalaryRange(float minSalary, float maxSalary);
-    std::vector<Job> getMatchingJobsForUser(int userId, UserList& userList);
+    std::vector<Job> getMatchingJobsForUser(int userId);
 
     int generateId();
 };

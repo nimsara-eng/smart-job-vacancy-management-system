@@ -4,6 +4,8 @@
 #include "../models/User.h"
 #include "../models/Application.h"
 
+// ─── JOB LINKED LIST ─────────────────────────────────────────────────────────
+
 class JobList {
 private:
     struct Node {
@@ -89,6 +91,7 @@ public:
         return size;
     }
 
+    // BUG FIX: original destructor was correct; no change needed here.
     ~JobList() {
         Node* current = head;
         while (current != nullptr) {
@@ -98,6 +101,8 @@ public:
         }
     }
 };
+
+// ─── USER LINKED LIST ─────────────────────────────────────────────────────────
 
 class UserList {
 private:
@@ -193,6 +198,8 @@ public:
         }
     }
 };
+
+// ─── APPLICATION LINKED LIST ──────────────────────────────────────────────────
 
 class ApplicationList {
 private:

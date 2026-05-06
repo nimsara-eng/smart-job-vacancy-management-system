@@ -3,18 +3,14 @@
 #include "../models/Job.h"
 #include "../models/User.h"
 
+// ─── Job Hash Table ───────────────────────────────────────────────────────────
+
 class JobHashTable {
 private:
-
-    // Each slot in the array holds a linked list of these nodes
     struct Node {
         Job job;
         Node* next;
-
-        Node(Job j) {
-            job = j;
-            next = nullptr;
-        }
+        Node(Job j) : job(j), next(nullptr) {}
     };
 
     static const int TABLE_SIZE = 100;
@@ -25,11 +21,8 @@ private:
     }
 
 public:
-
     JobHashTable() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            table[i] = nullptr;
-        }
+        for (int i = 0; i < TABLE_SIZE; i++) table[i] = nullptr;
     }
 
     void insert(Job job) {
@@ -43,9 +36,7 @@ public:
         int index = hashFunction(id);
         Node* current = table[index];
         while (current != nullptr) {
-            if (current->job.id == id) {
-                return &current->job;
-            }
+            if (current->job.id == id) return &current->job;
             current = current->next;
         }
         return nullptr;
@@ -55,14 +46,10 @@ public:
         int index = hashFunction(id);
         Node* current = table[index];
         Node* prev = nullptr;
-
         while (current != nullptr) {
             if (current->job.id == id) {
-                if (prev == nullptr) {
-                    table[index] = current->next;
-                } else {
-                    prev->next = current->next;
-                }
+                if (prev == nullptr) table[index] = current->next;
+                else prev->next = current->next;
                 delete current;
                 return;
             }
@@ -83,18 +70,14 @@ public:
     }
 };
 
-class UserHashTable{
-  private:
+// ─── User Hash Table ──────────────────────────────────────────────────────────
 
-    // Each slot in the array holds a linked list of these nodes
+class UserHashTable {
+private:
     struct Node {
         User user;
         Node* next;
-
-        Node(User u) {
-            user = u;
-            next = nullptr;
-        }
+        Node(User u) : user(u), next(nullptr) {}
     };
 
     static const int TABLE_SIZE = 100;
@@ -104,12 +87,9 @@ class UserHashTable{
         return id % TABLE_SIZE;
     }
 
-  public:
-
+public:
     UserHashTable() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            table[i] = nullptr;
-        }
+        for (int i = 0; i < TABLE_SIZE; i++) table[i] = nullptr;
     }
 
     void insert(User user) {
@@ -123,9 +103,7 @@ class UserHashTable{
         int index = hashFunction(id);
         Node* current = table[index];
         while (current != nullptr) {
-            if (current->user.id == id) {
-                return &current->user;
-            }
+            if (current->user.id == id) return &current->user;
             current = current->next;
         }
         return nullptr;
@@ -135,14 +113,10 @@ class UserHashTable{
         int index = hashFunction(id);
         Node* current = table[index];
         Node* prev = nullptr;
-
         while (current != nullptr) {
             if (current->user.id == id) {
-                if (prev == nullptr) {
-                    table[index] = current->next;
-                } else {
-                    prev->next = current->next;
-                }
+                if (prev == nullptr) table[index] = current->next;
+                else prev->next = current->next;
                 delete current;
                 return;
             }

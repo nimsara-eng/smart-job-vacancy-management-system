@@ -1,18 +1,28 @@
-import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
+import path from 'path'
+import fs from 'fs'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+    {
+      // Serve Job-Vacancy-System/data/ at the /data route in dev
+      name: 'serve-root-data',
+      configureServer(server) {
+        server.middlewares.use('/data', (req, res, next) => {
+          const fileName = (req.url ?? '/').replace(/^\//, '')
+          const filePath = path.resolve(__dirname, '../data', fileName)
+
+          if (fileName && fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8')
+            res.setHeader('Cache-Control', 'no-store') // always read latest from disk
+            fs.createReadStream(filePath).pipe(res as any)
+          } else {
+            next()
+          }
+        })
+      },
     },
-  },
+  ],
 })

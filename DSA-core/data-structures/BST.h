@@ -19,7 +19,6 @@ private:
 
     Node* root;
 
-    // Private helper functions
     Node* insert(Node* node, Job job) {
         if (node == nullptr) {
             return new Node(job);
@@ -27,6 +26,10 @@ private:
         if (job.salary < node->job.salary) {
             node->left = insert(node->left, job);
         } else if (job.salary > node->job.salary) {
+            node->right = insert(node->right, job);
+        }
+        // If salary is equal, insert to the right (handles duplicate salaries)
+        else {
             node->right = insert(node->right, job);
         }
         return node;
@@ -59,14 +62,13 @@ private:
         return node;
     }
 
-    Node* remove(Node* node, float salary) {
+    // BUG FIX: Old remove() deleted by salary (wrong - multiple jobs can share a salary).
+    // New removeById() deletes the exact node matching the job ID.
+    Node* removeById(Node* node, int id) {
         if (node == nullptr) return nullptr;
 
-        if (salary < node->job.salary) {
-            node->left = remove(node->left, salary);
-        } else if (salary > node->job.salary) {
-            node->right = remove(node->right, salary);
-        } else {
+        // Search both subtrees since BST is ordered by salary, not id
+        if (node->job.id == id) {
             // Node found - 3 cases
             if (node->left == nullptr) {
                 Node* temp = node->right;
@@ -79,8 +81,12 @@ private:
             } else {
                 Node* successor = findMin(node->right);
                 node->job = successor->job;
-                node->right = remove(node->right, successor->job.salary);
+                node->right = removeById(node->right, successor->job.id);
             }
+        } else {
+            // Must search both sides since we're searching by ID, not salary
+            node->left  = removeById(node->left, id);
+            node->right = removeById(node->right, id);
         }
         return node;
     }
@@ -114,8 +120,10 @@ public:
         return result;
     }
 
-    void remove(float salary) {
-        root = remove(root, salary);
+    // BUG FIX: renamed from remove(float salary) to removeById(int id)
+    // Old version deleted by salary - wrong when multiple jobs share the same salary
+    void removeById(int id) {
+        root = removeById(root, id);
     }
 
     ~BST() {

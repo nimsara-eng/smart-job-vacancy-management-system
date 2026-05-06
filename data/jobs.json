@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "title": "Senior Software Engineer",
+    "company": "TechCorp LK",
+    "requiredSkills": ["React", "Node.js", "TypeScript", "PostgreSQL"],
+    "salary": 250000,
+    "isOpen": true,
+    "isRemote": true,
+    "description": "We are looking for a Senior Software Engineer to join our growing team. You will be responsible for designing and building scalable web applications.",
+    "location": "Colombo, Sri Lanka",
+    "category": "Software"
+  },
+  {
+    "id": 2,
+    "title": "Frontend Developer",
+    "company": "Digital Solutions",
+    "requiredSkills": ["Vue.js", "CSS", "JavaScript", "Figma"],
+    "salary": 180000,
+    "isOpen": true,
+    "isRemote": false,
+    "description": "Join our creative team building beautiful, performant user interfaces for enterprise clients across South Asia.",
+    "location": "Kandy, Sri Lanka",
+    "category": "Software"
+  },
+  {
+    "id": 3,
+    "title": "Embedded Systems Engineer",
+    "company": "InnoTech",
+    "requiredSkills": ["C++", "ARM", "RTOS", "PCB Design"],
+    "salary": 200000,
+    "isOpen": true,
+    "isRemote": false,
+    "description": "Design and develop firmware for IoT devices and embedded systems used in industrial automation.",
+    "location": "Galle, Sri Lanka",
+    "category": "Hardware"
+  },
+  {
+    "id": 4,
+    "title": "UI/UX Designer",
+    "company": "CreativeMind",
+    "requiredSkills": ["Figma", "Sketch", "Prototyping", "User Research"],
+    "salary": 150000,
+    "isOpen": true,
+    "isRemote": true,
+    "description": "Design elegant and user-friendly interfaces for our suite of SaaS products.",
+    "location": "Colombo, Sri Lanka",
+    "category": "Design"
+  },
+  {
+    "id": 5,
+    "title": "Data Analyst",
+    "company": "DataInsights",
+    "requiredSkills": ["Python", "SQL", "Tableau", "Excel"],
+    "salary": 160000,
+    "isOpen": true,
+    "isRemote": false,
+    "description": "Analyse business data and provide actionable insights to support decision-making across departments.",
+    "location": "Colombo, Sri Lanka",
+    "category": "Finance"
+  },
+  {
+    "id": 6,
+    "title": "DevOps Engineer",
+    "company": "CloudBase",
+    "requiredSkills": ["Docker", "Kubernetes", "AWS", "Linux"],
+    "salary": 220000,
+    "isOpen": false,
+    "isRemote": true,
+    "description": "Maintain CI/CD pipelines and cloud infrastructure to keep our platform at 99.9% uptime.",
+    "location": "Remote",
+    "category": "Software"
+  }
+]

@@ -1,23 +1,36 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { useAuthStore } from '../stores/auth'
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    requiresAuth?: boolean
+    guest?: boolean
+    role?: 'applicant' | 'employer' | 'admin'
+  }
+}
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
+    { path: '/', redirect: '/jobs' },
+    { path: '/login', name: 'Login', component: () => import('../views/LoginView.vue'), meta: { guest: true } },
+    { path: '/register', name: 'Register', component: () => import('../views/RegisterView.vue'), meta: { guest: true } },
+    { path: '/jobs', name: 'Jobs', component: () => import('../views/JobsView.vue') },
+    { path: '/jobs/:id', name: 'JobDetail', component: () => import('../views/JobDetailView.vue') },
+    { path: '/dashboard', name: 'Dashboard', component: () => import('../views/DashboardView.vue'), meta: { requiresAuth: true } },
+    { path: '/applications', name: 'Applications', component: () => import('../views/ApplicationsView.vue'), meta: { requiresAuth: true } },
+    { path: '/post-job', name: 'PostJob', component: () => import('../views/PostJobView.vue'), meta: { requiresAuth: true, role: 'employer' } },
+    { path: '/manage-jobs', name: 'ManageJobs', component: () => import('../views/ManageJobsView.vue'), meta: { requiresAuth: true, role: 'employer' } },
+    { path: '/profile', name: 'Profile', component: () => import('../views/ProfileView.vue'), meta: { requiresAuth: true } },
+    { path: '/admin', name: 'Admin', component: () => import('../views/AdminView.vue'), meta: { requiresAuth: true, role: 'admin' } },
   ],
+})
+
+router.beforeEach(guard => {
+  const auth = useAuthStore()
+  if (guard.meta.requiresAuth && !auth.isLoggedIn) return { name: 'Login', query: { redirect: guard.fullPath } }
+  if (guard.meta.guest && auth.isLoggedIn) return { name: 'Dashboard' }
+  if (guard.meta.role && auth.user?.role !== guard.meta.role) return { name: 'Jobs' }
 })
 
 export default router
