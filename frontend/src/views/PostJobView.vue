@@ -129,7 +129,10 @@ async function handleSubmit() {
   error.value = ''
   loading.value = true
   await new Promise(r => setTimeout(r, 500))
-  data.addJob({ ...form })
+  data.addJob({ 
+    ...form, 
+    userId: auth.user?.id || 1 
+  })
   loading.value = false
   success.value = true
   // Reset

@@ -8,7 +8,7 @@
 #include "../algorithms/Sort.h"
 #include "../algorithms/Search.h"
 #include "../models/Job.h"
-#include "../models/User.h"  // BUG FIX: added explicit User include (needed for buildGraphForNewJob)
+#include "../models/User.h"  
 
 class JobManager {
 private:
@@ -22,7 +22,7 @@ private:
 public:
     JobManager(JobList& jl, BST& b, JobHashTable& ht, Graph& g);
 
-    void addJob(Job job, UserList& userList);  // BUG FIX: userList passed so graph edges are built for existing users
+    void addJob(Job job, UserList& userList);  
     void removeJob(int id);
     void updateJobStatus(int id, bool isOpen);
 

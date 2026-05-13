@@ -107,7 +107,7 @@ std::vector<Job> JobManager::searchBySalaryRange(float minSalary, float maxSalar
     return bst.searchByRange(minSalary, maxSalary);
 }
 
-// BUG FIX: removed unused UserList& parameter - graph already has the edges built.
+
 std::vector<Job> JobManager::getMatchingJobsForUser(int userId) {
     std::vector<int> matchedJobIds = graph.getMatchingJobs(userId);
     std::vector<Job> matchedJobs;

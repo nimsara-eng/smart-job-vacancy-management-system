@@ -5,6 +5,7 @@
 
 struct Job{
   int id = 0;
+  int userId = 0;
   std::string title;
   std::string company;
   std::vector<std::string> requiredSkills;

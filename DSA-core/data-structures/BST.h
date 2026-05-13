@@ -62,8 +62,7 @@ private:
         return node;
     }
 
-    // BUG FIX: Old remove() deleted by salary (wrong - multiple jobs can share a salary).
-    // New removeById() deletes the exact node matching the job ID.
+    
     Node* removeById(Node* node, int id) {
         if (node == nullptr) return nullptr;
 
@@ -120,8 +119,7 @@ public:
         return result;
     }
 
-    // BUG FIX: renamed from remove(float salary) to removeById(int id)
-    // Old version deleted by salary - wrong when multiple jobs share the same salary
+    
     void removeById(int id) {
         root = removeById(root, id);
     }

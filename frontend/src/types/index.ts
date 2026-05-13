@@ -2,6 +2,7 @@
 
 export interface Job {
   id: number
+  userId: number
   title: string
   company: string
   requiredSkills: string[]

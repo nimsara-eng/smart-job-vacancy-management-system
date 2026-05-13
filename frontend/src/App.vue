@@ -14,7 +14,10 @@
               <line x1="9" y1="14.5" x2="15" y2="14.5" stroke="var(--c-accent)" stroke-width="1.8" stroke-linecap="round"/>
             </svg>
           </span>
-          <span class="brand-name">SJVMS</span>
+          <!-- <span class="brand-icon">
+            <img src="./assets/logo.png" alt="JobPilot Logo" class="project-logo"/>
+          </span> -->
+          <span class="brand-name">JobPilot</span>
         </RouterLink>
 
         <!-- Links -->
@@ -160,6 +163,12 @@ onUnmounted(() => {
   border-radius: 9px;
   display: grid;
   place-items: center;
+}
+.project-logo {
+  width: 26px;  /* Slightly smaller than the 36px box to give it breathing room */
+  height: 26px;
+  object-fit: contain;
+  display: block;
 }
 .brand-name {
   font-family: var(--font-display);

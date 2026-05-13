@@ -85,9 +85,9 @@ import { useDataStore } from '../stores/data'
 const auth = useAuthStore()
 const data = useDataStore()
 
-const myJobs = computed(() =>
-  data.jobs.filter(j => j.company === auth.user?.name || j.company === auth.user?.username),
-)
+const myJobs = computed(() => {
+  return data.jobs.filter(job => job.userId === auth.user?.id)
+})
 
 function appCount(jobId: number) {
   return data.getApplicationsByJob(jobId).length

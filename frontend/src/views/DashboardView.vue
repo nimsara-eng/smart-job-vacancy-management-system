@@ -179,7 +179,7 @@ function statusBadge(status: string) {
 .name-highlight {
   background: linear-gradient(135deg, var(--c-accent), var(--c-accent2));
   -webkit-background-clip: text;
-  background-clip: text; /* Fixed compatibility warning */
+  background-clip: text; 
   -webkit-text-fill-color: transparent;
 }
 

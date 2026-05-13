@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "applicationId": 1,
+        "appliedDate": "2026-05-12",
+        "jobId": 4,
+        "status": "approved",
+        "userId": 1
+    },
+    {
+        "applicationId": 2,
+        "appliedDate": "2026-05-12",
+        "jobId": 2,
+        "status": "pending",
+        "userId": 1
+    }
+]

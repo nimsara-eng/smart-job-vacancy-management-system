@@ -1,32 +1,64 @@
 [
-  {
-    "id": 1,
-    "username": "admin",
-    "password": "admin123",
-    "email": "admin@sjvms.lk",
-    "skills": [],
-    "role": "admin",
-    "name": "System Admin",
-    "phone": "0771234567"
-  },
-  {
-    "id": 2,
-    "username": "employer1",
-    "password": "pass123",
-    "email": "hr@techcorp.lk",
-    "skills": [],
-    "role": "employer",
-    "name": "TechCorp LK",
-    "phone": "0112345678"
-  },
-  {
-    "id": 3,
-    "username": "malindu",
-    "password": "pass123",
-    "email": "malindu@email.com",
-    "skills": ["React", "Node.js", "TypeScript", "Python", "C++"],
-    "role": "applicant",
-    "name": "Malindu Perera",
-    "phone": "0771111111"
-  }
+    {
+        "email": "admin@sjvms.lk",
+        "id": 1,
+        "name": "System Admin",
+        "password": "admin123",
+        "phone": "0771234567",
+        "role": "admin",
+        "skills": [],
+        "username": "admin"
+    },
+    {
+        "email": "hr@techcorp.lk",
+        "id": 2,
+        "name": "TechCorp LK",
+        "password": "pass123",
+        "phone": "0112345678",
+        "role": "employer",
+        "skills": [],
+        "username": "employer1"
+    },
+    {
+        "email": "malindu@email.com",
+        "id": 3,
+        "name": "Malindu Perera",
+        "password": "pass123",
+        "phone": "0771111111",
+        "role": "applicant",
+        "skills": [
+            "React",
+            "Node.js",
+            "TypeScript",
+            "Python",
+            "C++"
+        ],
+        "username": "malindu"
+    },
+    {
+        "email": "mm@gmail.com",
+        "id": 1,
+        "name": "Malindu ",
+        "password": "1111",
+        "phone": "0712345678",
+        "role": "applicant",
+        "skills": [
+            "Figma",
+            "Python",
+            "C++",
+            "Java"
+        ],
+        "username": "mm"
+    },
+    {
+        "email": "nn@gmail.com",
+        "id": 2,
+        "userId": 2,
+        "name": "Nimal",
+        "password": "1111",
+        "phone": "0721345678",
+        "role": "employer",
+        "skills": [],
+        "username": "nn"
+    }
 ]

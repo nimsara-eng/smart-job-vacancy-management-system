@@ -1,74 +1,105 @@
 [
-  {
-    "id": 1,
-    "title": "Senior Software Engineer",
-    "company": "TechCorp LK",
-    "requiredSkills": ["React", "Node.js", "TypeScript", "PostgreSQL"],
-    "salary": 250000,
-    "isOpen": true,
-    "isRemote": true,
-    "description": "We are looking for a Senior Software Engineer to join our growing team. You will be responsible for designing and building scalable web applications.",
-    "location": "Colombo, Sri Lanka",
-    "category": "Software"
-  },
-  {
-    "id": 2,
-    "title": "Frontend Developer",
-    "company": "Digital Solutions",
-    "requiredSkills": ["Vue.js", "CSS", "JavaScript", "Figma"],
-    "salary": 180000,
-    "isOpen": true,
-    "isRemote": false,
-    "description": "Join our creative team building beautiful, performant user interfaces for enterprise clients across South Asia.",
-    "location": "Kandy, Sri Lanka",
-    "category": "Software"
-  },
-  {
-    "id": 3,
-    "title": "Embedded Systems Engineer",
-    "company": "InnoTech",
-    "requiredSkills": ["C++", "ARM", "RTOS", "PCB Design"],
-    "salary": 200000,
-    "isOpen": true,
-    "isRemote": false,
-    "description": "Design and develop firmware for IoT devices and embedded systems used in industrial automation.",
-    "location": "Galle, Sri Lanka",
-    "category": "Hardware"
-  },
-  {
-    "id": 4,
-    "title": "UI/UX Designer",
-    "company": "CreativeMind",
-    "requiredSkills": ["Figma", "Sketch", "Prototyping", "User Research"],
-    "salary": 150000,
-    "isOpen": true,
-    "isRemote": true,
-    "description": "Design elegant and user-friendly interfaces for our suite of SaaS products.",
-    "location": "Colombo, Sri Lanka",
-    "category": "Design"
-  },
-  {
-    "id": 5,
-    "title": "Data Analyst",
-    "company": "DataInsights",
-    "requiredSkills": ["Python", "SQL", "Tableau", "Excel"],
-    "salary": 160000,
-    "isOpen": true,
-    "isRemote": false,
-    "description": "Analyse business data and provide actionable insights to support decision-making across departments.",
-    "location": "Colombo, Sri Lanka",
-    "category": "Finance"
-  },
-  {
-    "id": 6,
-    "title": "DevOps Engineer",
-    "company": "CloudBase",
-    "requiredSkills": ["Docker", "Kubernetes", "AWS", "Linux"],
-    "salary": 220000,
-    "isOpen": false,
-    "isRemote": true,
-    "description": "Maintain CI/CD pipelines and cloud infrastructure to keep our platform at 99.9% uptime.",
-    "location": "Remote",
-    "category": "Software"
-  }
+    {
+        "category": "Software",
+        "company": "Digital Solutions",
+        "description": "Join our creative team building beautiful, performant user interfaces for enterprise clients across South Asia.",
+        "id": 2,
+        "isOpen": true,
+        "isRemote": false,
+        "location": "Kandy, Sri Lanka",
+        "requiredSkills": [
+            "Vue.js",
+            "CSS",
+            "JavaScript",
+            "Figma"
+        ],
+        "salary": 180000.0,
+        "title": "Frontend Developer"
+    },
+    {
+        "category": "Hardware",
+        "company": "InnoTech",
+        "description": "Design and develop firmware for IoT devices and embedded systems used in industrial automation.",
+        "id": 3,
+        "isOpen": true,
+        "isRemote": false,
+        "location": "Galle, Sri Lanka",
+        "requiredSkills": [
+            "C++",
+            "ARM",
+            "RTOS",
+            "PCB Design"
+        ],
+        "salary": 200000.0,
+        "title": "Embedded Systems Engineer"
+    },
+    {
+        "category": "Design",
+        "company": "CreativeMind",
+        "description": "Design elegant and user-friendly interfaces for our suite of SaaS products.",
+        "id": 4,
+        "isOpen": true,
+        "isRemote": true,
+        "location": "Colombo, Sri Lanka",
+        "requiredSkills": [
+            "Figma",
+            "Sketch",
+            "Prototyping",
+            "User Research"
+        ],
+        "salary": 150000.0,
+        "title": "UI/UX Designer"
+    },
+    {
+        "category": "Finance",
+        "company": "DataInsights",
+        "description": "Analyse business data and provide actionable insights to support decision-making across departments.",
+        "id": 5,
+        "isOpen": true,
+        "isRemote": false,
+        "location": "Colombo, Sri Lanka",
+        "requiredSkills": [
+            "Python",
+            "SQL",
+            "Tableau",
+            "Excel"
+        ],
+        "salary": 160000.0,
+        "title": "Data Analyst"
+    },
+    {
+        "category": "Software",
+        "company": "CloudBase",
+        "description": "Maintain CI/CD pipelines and cloud infrastructure to keep our platform at 99.9% uptime.",
+        "id": 6,
+        "isOpen": false,
+        "isRemote": true,
+        "location": "Remote",
+        "requiredSkills": [
+            "Docker",
+            "Kubernetes",
+            "AWS",
+            "Linux"
+        ],
+        "salary": 220000.0,
+        "title": "DevOps Engineer"
+    },
+    {
+        "category": "IT",
+        "company": "TechSolutions",
+        "description": "Join Us",
+        "id": 2,
+        "isOpen": true,
+        "isRemote": true,
+        "location": "Galle, Sri Lanka",
+        "requiredSkills": [
+            "JavaScript",
+            "React",
+            "HTML",
+            "Figma",
+            "GraphQL"
+        ],
+        "salary": 650000.0,
+        "title": "Senior UI/UX Developer"
+    }
 ]
